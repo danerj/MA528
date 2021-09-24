@@ -1,0 +1,285 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{fullpage}
+
+
+\makeatletter
+\def\moverlay{\mathpalette\mov@rlay}
+\def\mov@rlay#1#2{\leavevmode\vtop{%
+   \baselineskip\z@skip \lineskiplimit-\maxdimen
+   \ialign{\hfil$\m@th#1##$\hfil\cr#2\crcr}}}
+\newcommand{\charfusion}[3][\mathord]{
+    #1{\ifx#1\mathop\vphantom{#2}\fi
+        \mathpalette\mov@rlay{#2\cr#3}
+      }
+    \ifx#1\mathop\expandafter\displaylimits\fi}
+\makeatother
+
+\newcommand{\cupdot}{\charfusion[\mathbin]{\cup}{\cdot}}
+\newcommand{\bigcupdot}{\charfusion[\mathop]{\bigcup}{\cdot}}
+
+\title{MA 528 Exercise Set 2}
+\author{Dane Johnson}
+
+\setlength\parindent{0pt}
+\begin{document}
+\maketitle
+
+\section*{Chapter 4 Probabilities on a Finite or Countable Space}
+
+\subsection*{Exercise 4.1 (Poisson Approximation to the Binomial)}
+
+Let $P$ be a binomial probability with probability of success $p$ and number of trials $n$. Let $\lambda = pn$. . Show that
+
+$$
+P(k \text{ successes}) = \frac{\lambda^k}{k!}(1-\frac{\lambda}{n})^n \left\lbrace\frac{n}{n}\frac{n-1}{n} \dots \frac{n-k+1}{n}\right\rbrace (1 - \frac{\lambda}{n})^{-k}.
+$$
+
+Let $n \rightarrow \infty$ and let $p$ change so that $\lambda$ remains constant. Conclude that for
+small $p$ and large $n$,
+
+$$
+P(k \text{ successes}) \approx \frac{\lambda^k}{k!}e^{-\lambda}, \quad \text{where } \lambda = pn.
+$$
+
+Answer:
+
+
+\begin{align*}
+P(X = k) &= \binom{n}{k}p^k(1-p)^{n-k} \\
+&= \frac{n!}{k!(n-k)!}\left(\frac{\lambda}{n}\right)^k \left(1 -\frac{\lambda}{n}\right)^{n-k} \\
+&= \frac{\lambda^k}{k!}\left(1-\frac{\lambda}{n}\right)^n\left(1-\frac{\lambda}{n}\right)^{-k}\frac{n(n-1)\dots (n-k+1)}{n^k} \\
+&= \frac{\lambda^k}{k!}\left(1-\frac{\lambda}{n}\right)^n\left(1-\frac{\lambda}{n}\right)^{-k}\frac{n}{n}\frac{n-1}{n} \dots \frac{n-k+1}{n} \\
+&= \frac{\lambda^k}{k!}\left(1 + \left(-\frac{\lambda}{n}\right)\right)^n\left\lbrace\frac{n}{n}\frac{n-1}{n} \dots \frac{n-k+1}{n}\right\rbrace \left(1-\frac{\lambda}{n}\right)^{-k}\\
+&\approx \frac{\lambda^k}{k!}e^{-n\lambda / n} \left\lbrace\frac{n}{n}\frac{n-1}{n} \dots \frac{n-k+1}{n}\right\rbrace \left(1-\frac{\lambda}{n}\right)^{-k} \quad ((1+a)^n \approx e^{na} \text{ for small } a)^* \\
+&= \frac{\lambda^k}{k!}e^{-\lambda} \left\lbrace\frac{n}{n}\frac{n-1}{n} \dots \frac{n-k+1}{n}\right\rbrace \left(1-\frac{\lambda}{n}\right)^{-k}\\
+&\rightarrow \frac{\lambda^k}{k!}e^{-\lambda} \cdot 1 \cdot  1^{-k} = \frac{\lambda^k}{k!}e^{-\lambda} \quad \text{as} \quad n \rightarrow \infty.
+\end{align*}
+
+$^*$The approximation $(1+a) \approx e^{na}$ for 'small $a$' warrants discussion.
+
+\begin{align*}
+\frac{1}{1+a} &= 1 - a + a^2 - a^3 + \dots, \quad |a| < 1\\
+\ln (1+a) &= a - \frac{a^2}{2} + \frac{a^3}{3} - \dots \\
+1+a &= e^ae^{-a^2/2}e^{a^3/3}\dots \\
+(1+a)^n &= e^{na}e^{-na^2/2}e^{na^3/3}\dots \\
+\end{align*}
+
+If $na << 1$, $(1+a)^n \approx e^0 = 1$. In our calculation, $n(-\lambda / n) = \lambda$ does not satisfy this criterion. If $na^2 <<1$, $(1+a)^n \approx e^{na}$. In our calculation $n(-\lambda / n)^2 = \lambda / n << 1$ for large $n$ assuming that we let $p$ change so that $\lambda$ remains constant as $n \rightarrow \infty$. 
+
+\subsection*{Exercise 4.2 (Poisson Approximation to the Binomial continued)}
+
+In the setting of Exercise 4.1, let $p_k = P(\{k\})$ and $q_k = 1 - p_k$. Show that the $q_k$ are the
+probabilities of singletons for a Binomial distribution $B(1 - p, n)$. Deduce a Poisson approximation of the Binomial when $n$ is large and $p$ is close to 1. \\
+
+Answer: For $X \sim B(n,p)$ and $Y \sim B(n,1-p)$,
+
+\begin{align*}
+P(\{k\}) &= P(X = k)\\
+&= \binom{n}{k} p^k(1-p)^{n-k} \\
+&= \binom{n}{n-k} p^k(1-p)^{n-k} \\
+&= \binom{n}{j} p^{n-j}(1-p)^{j}, \quad j = n-k \\
+&= \binom{n}{j} (1-p)^{j}p^{n-j} \\
+&= \binom{n}{j} q^j(1-q)^{n-j} \\
+&= P(Y = j) = P(\{j\})
+\end{align*}
+
+$\lambda = pn \implies n-\lambda = n(1-p) = nq$. 
+
+$$
+P(Y = j) \approx \frac{(n-\lambda)^j}{j!}e^{\lambda - n} \quad \text{ for large } n
+$$
+
+\subsection*{Exercise 4.3}
+
+We consider the setting of the hypergeometric distribution, except that we have $m$ colors and $N_i$ balls of color $i$. Set $N = N_1+\dots +N_m$, and call $X_i$ the
+number of balls of color $i$ drawn among $n$ balls. Of course $X_1 + \dots +X_m = n$.
+Show that
+
+$$
+P(X_1 = x_1, \dots X_m = x_m) = 
+\begin{cases}
+\frac{\binom{N_1}{x_1} \dots \binom{N_m}{x_m}}{\binom{N}{n}} & \text{if } x_1 + \dots x_m = n \\
+0 & \text{otherwise}
+\end{cases}
+$$
+
+Answer: Consider an outcome to be a subset (containing $n$ elements) of the set $\{1,2, \dots, N\}$ of all $N = N_1+\dots N_m$ balls (which can be assumed to be numbered from 1 to N). That is, $\Omega$ is the family of all subsets of $\{1,\dots, N\}$ with $n$ points and $\#(\Omega) = \binom{N}{n}$. \\
+
+Consider the case where $P$ is the uniform probability on $\Omega$. The set $\{X_1 = x_1, \dots , X_m = x_m\} = X^{-1}(\{(x_1, \dots , x_m\})$ contains $\binom{N_1}{x_1}\binom{N_2}{x_2} \dots \binom{N_m}{m}$ points for $x_1 + x_2 + \dots + x_m = n$. If $x_1 + \dots + x_m \neq n$, $ \{X_1 = x_1, \dots X_m = x_m\} = \emptyset$ so $\#(X_1 = x_1, \dots X_m = x_m) = 0$. Therefore,
+$$
+P(X_1 = x_1, \dots , X_m = x_m) = \frac{\#(X_1 = x_1, \dots , X_m = x_m)}{\#(\Omega)} 
+=
+\begin{cases}
+\frac{\binom{N_1}{x_1} \binom{N_2}{x_2}\dots \binom{N_m}{x_m}}{\binom{N}{n}} & \text{if } x_1 + \dots + x_m = n \\
+0 & \text{otherwise}
+\end{cases}
+$$
+
+\section*{Chapter 5 Random Variables on a Countable Space}
+
+\subsection*{Exercise 5.1}
+
+Let $g : [0, \infty) \rightarrow [0,\infty)$ be strictly increasing and nonnegative. Show that
+
+$$
+P(\{|X| \geq a\}) \leq
+\frac{E\{g(|X|)\}}
+{g(a)}, \quad a > 0.
+$$
+
+Answer: For $a > 0$, $\{|X| \geq a \} = \{\omega : |X(\omega)| \geq a\} = \{\omega : g(|X(\omega)| \geq g(a)\} = \{g(|X|) \geq g(a)\}$ since $g$ is strictly increasing and nonnegative. Also $|X|$ is random variable since $X$ is a random variable. Since $g$ is strictly increasing and has domain $[0,\infty)$, the only possible $x$ such that $g(x) = 0$ is $x = 0$. We must have $g(a) > 0$ because $a > 0$. By Theorem 5.1,
+
+$$
+P(\{|X| \geq a \}) = P(\{g(|X|) \geq g(a)\}) \leq \frac{E\{g(|X|)\}}{g(a)}.
+$$
+
+
+\subsection*{Exercise 5.6}
+
+Let $X$ be Binomial $B(p, n)$. For what value of $j$ is $P(X = j)$ the greatest?\\
+
+Answer:
+
+For $k \geq 1$, $P(X = k -1) > 0$ and
+
+$$
+\frac{P(X = k)}{P(X = k-1)}
+= \frac{\binom{n}{k}p^k(1-p)^{n-k}}{\binom{n}{k-1}p^{k-1}(1-p)^{n-k+1}}
+= \frac{n!}{k!(n-k)!}\frac{(k-1)!(n-k+1)!}{n!}\frac{p}{1-p}
+= \frac{n-k+1}{k}\frac{p}{1-p}.
+$$
+
+We have $P(X = k) \geq P(X = k-1)$ for $P(X=k) / P(X = k-1) \geq 1$.
+
+$$
+\frac{n-k+1}{k}\frac{p}{1-p} \geq 1 \iff (n+1)p \geq k.
+$$
+
+Let $j = [(n+1)p]$, where $[x]$ is the floor function. For any $k < j$, $k \leq j-1$ so $P(X = j) \geq P(X = k)$. For any $k > j$, $P(X = j) < P(X = k)$. Conclude that $P(X = j)$ is greatest for $j = [(n+1)p]$. 
+
+\subsection*{Exercise 5.7}
+
+Let $X$ be Binomial $B(p, n)$. Find the probability $X$ is even. \\
+
+Answer: If $p = 0$ then $X$, there will always be 0 successes so the probability that $X$ is even is 1. If $p = 1$, then $X = n$ and so the probability that $X$ is even is $1$ if $n$ is even and $0$ if $n$ is odd. \\
+
+Let $P_n$ be the probability that $X \sim B(p,n), p \in (0,1)$ is an even number. To calculate the probability $P_{n+1}$ consider for $X \sim B(p,n+1)$ whether there are an even number of successes or an odd number of successes from $n$ trials. Then $P_{n+1} = (1-p)P_n + p(1-P_n) = p + (1-2p)P_n$. Motivated by the idea that $P_n$ approaches $1/2$ as $n$ approaches $+\infty$, let $x_n  = P_n - \frac{1}{2}$. 
+
+$$
+x_{n+1} = P_{n+1} - \frac{1}{2} = p + (1-2p)(x_n + \frac{1}{2}) + \frac{1}{2} = (1-2p)x_n.
+$$
+
+Since the probability that $X$ is even for $X \sim B(0,p)$ is 1, $x_0 = P_0 - \frac{1}{2} = \frac{1}{2}$. Thus $(x_n)$ is a geometric sequence with common ratio $(1-2p)$ so we write $x_n = \frac{1}{2}(1-2p)^n$. For $0<p<1$, $|1-2p| < 1$ so $x_n \rightarrow 0$ as $n \rightarrow \infty$. This means that the probability that $X \sim B(n,p)$ is even is $P_n = \frac{1}{2} + x_n = \frac{1}{2}(1 +(1-2p)^n)$. Checking $P_n$ for $p = 0$ and $p=1$ shows that this formula holds for any $p \in [0,1]$. 
+
+\subsection*{Exercise 5.9}
+
+Let $X$ be Poisson $(\lambda)$. What value of $j$ maximizes $P(X = j)$?\\
+
+Answer: Consider that $P(X = k) \geq P(X = k-1)$ for $P(X = k) / P(X = k-1) \geq 1$. 
+
+$$
+\frac{P(X = k)}{P(X = k-1)} = \frac{\frac{\lambda^k}{k!}e^{-\lambda}}{\frac{\lambda^{k-1}}{(k-1)!}e^{-\lambda}} = \frac{\lambda}{k}.
+$$
+
+This shows that $P(X = k) \geq P(X = k-1)$ for $k \leq \lambda$. Let $j = [\lambda]$, where $[x]$ is the floor function. By the reasoning given in Exercise 5.6, $j$ maximizes $P(X = j)$. 
+
+\subsection*{Exercise 5.12}
+
+Let $X$ be Binomial $B(p, n)$. Show that for $\lambda > 0$ and $\epsilon > 0$,
+
+$$
+P(X - np > n\epsilon) \leq E\{\exp(\lambda(X - np - n\epsilon))\}.
+$$
+
+Partial Answer:
+
+$$
+P(X - np > n\epsilon) \leq P(|X - np| \geq n\epsilon)
+\leq \frac{E\{\exp(\lambda|X - np|)\}}{\exp(\lambda n\epsilon)}
+= E\{\exp(\lambda(|X - np| -n\epsilon \}
+$$
+
+
+\subsection*{Exercise 5.13}
+
+Let $X_n$ be Binomial $B(p, n)$ with $p > 0$ fixed. Show that for any fixed $b > 0$, $P(X_n \leq b)$ tends to 0.\\
+
+
+\subsection*{Exercise 5.16}
+
+Let $X$ be Geometric. Show that for $i,j > 0$,
+
+$$
+P(X > i+j \vert  X > i) = P(X > j).
+$$
+
+Answer:
+
+\begin{align*}
+P(X > i+j \vert  X > i)
+&= \frac{P(\{X > i+j\} \cap \{X > i\})}{P(X > i)} \\
+&= \frac{P(X > i+j)}{P(X > i)} \\
+&= \frac{P(X = i+j+1) + P(X = i+j + 2) + \dots }{P(X = i+1) + \dots +P(X = i+j+1) + \dots} \\
+&= \frac{p(1-p)^{i+j+1} + p(1-p)^{i+j+2} + \dots }{p(1-p)^{i+1} + p(1-p)^{i+2} + \dots + p(1-p)^{i+j+1} + \dots}\\
+&= \frac{(1-p)^j + (1-p)^{j+1} + \dots}{1 + (1-p) + \dots +(1-p)^j + \dots } \\
+&= \frac{(1-p)^j(1 + (1-p) + \dots }{1 + (1-p) + \dots } \\
+&= (1-p)^j \\
+&= p(1-p)^j \frac{1}{1-(1-p)} \\
+&= p(1-p)^j(1 + (1-p) + (1-p)^2 + \dots ) \\
+&= p(1-p)^{j+1} + p(1-p)^{j+2} + \dots \\
+&= P(X = j+1) + P(X = j+2) + \dots \\
+&= P(X > j).
+\end{align*}
+
+\subsection*{Exercise 5.17}
+
+Let $X$ be Geometric $(p)$. Show 
+
+$$
+E\left\lbrace\frac{1}{1+X}\right\rbrace = \log\left((1-p)^{\frac{p}{p-1}}\right).
+$$
+
+Partial Answer:
+
+\begin{align*}
+E\left\lbrace\frac{1}{1+X}\right\rbrace
+&= \sum_{k = 0}^\infty \frac{1}{1+k} P\left(X = k \right) \\
+&= \sum_{k=0}^\infty \frac{1}{1+k} p(1-p)^k \\
+&= \sum_{j=1}^\infty \frac{1}{j}p(1-p)^{j-1} \\
+&= \frac{p}{1-p}\sum_{j=1}^\infty \frac{(1-p)^j}{j} \\
+&= -\frac{p}{1-p}\log(1 - (1-p)) \\
+&= \frac{p}{p-1}\log(p) \\
+&= \log \left(p^{\frac{p}{p-1}}\right) \\
+\end{align*}
+
+
+
+\subsection*{Exercise 5.19}
+Show that for a sequence of events $(A_n)_{n\geq 1}$, 
+
+$$
+E\left\lbrace \sum_{n=1}^\infty 1_{A_n} \right\rbrace
+= \sum_{n=1}^\infty P(A_n) .
+$$
+
+Answer: Using properties (i) and (v) of $\mathcal{L}^1$ given on page 28,
+
+$$
+E\left\lbrace \sum_{n=1}^\infty 1_{A_n} \right\rbrace
+= \sum_{n=1}^\infty E\{1_{A_n} \}
+= \sum_{n=1}^\infty P(A_n) \;.
+$$
+
+\subsection*{Exercise 5.20}
+
+Suppose $X$ takes all its values in $\mathbb{N} = \{0, 1, 2, 3,...\}$. Show that
+
+$$
+E\{X\} = \sum_{n=0}^\infty P(X > n).
+$$
+
+\end{document}
