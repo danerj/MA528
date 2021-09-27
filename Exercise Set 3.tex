@@ -1,0 +1,191 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{fullpage}
+\usepackage[shortlabels]{enumitem}
+
+
+\makeatletter
+\def\moverlay{\mathpalette\mov@rlay}
+\def\mov@rlay#1#2{\leavevmode\vtop{%
+   \baselineskip\z@skip \lineskiplimit-\maxdimen
+   \ialign{\hfil$\m@th#1##$\hfil\cr#2\crcr}}}
+\newcommand{\charfusion}[3][\mathord]{
+    #1{\ifx#1\mathop\vphantom{#2}\fi
+        \mathpalette\mov@rlay{#2\cr#3}
+      }
+    \ifx#1\mathop\expandafter\displaylimits\fi}
+\makeatother
+
+\newcommand{\cupdot}{\charfusion[\mathbin]{\cup}{\cdot}}
+\newcommand{\bigcupdot}{\charfusion[\mathop]{\bigcup}{\cdot}}
+
+\title{MA 528 Exercise Set 3}
+\author{Dane Johnson}
+
+\setlength\parindent{0pt}
+\begin{document}
+\maketitle
+
+\section*{Chapter 6 Construction of a Probability Measure}
+\section*{Chapter 7 Construction of a Probability Measure on $\mathbb{R}$}
+
+\subsection*{Exercise 7.1}
+
+Let $(A_n)_{n\geq 1}$ be any sequence of pairwise disjoint events and $P$ a probability. Show that $\lim_{n\rightarrow \infty} P(A_n) = 0$. \\
+
+Answer: Since $P(A_i) \geq 0$ for each $i$ the sequence $s_n = \sum_{i=1}^n P(A_i) = P(\cupdot_{i=1}^n A_i) \leq 1$ is a nonnegative sequence bounded that is bounded above 1 and is therefore convergent. This means the series $\lim_{n\rightarrow \infty} s_n = \sum_{i=1}^\infty P(A_i)$ is a convergent series, which implies $\lim_{n\rightarrow \infty} P(A_n) = 0$. 
+
+\subsection*{Exercise 7.6}
+
+Show that the maximum of the Lognormal density occurs at $x = e^{\mu}e^{-\sigma^2}$.\\
+
+Answer: The Lognormal distribution with parameters $\mu, \sigma^2$ ($-\infty < \mu < \infty$, $0< \sigma^2 < \infty$) is
+
+$$
+f(x) = \begin{cases}
+\frac{1}{x}g_{\mu , \sigma^2}(\log x) & x > 0 \\
+0 & x \leq 0
+\end{cases},
+$$
+
+where $g_{\mu ,\sigma^2}(z) = \frac{1}{\sqrt{2\pi} \sigma}e^{-(z-\mu)^2 / (2\sigma^2)}$ is the normal distribution with parameters $\mu , \sigma^2$. Fix the parameters $\mu, \sigma^2$ and let $g(z) = g_{\mu ,\sigma^2}(z)$, $\alpha = 1/(\sqrt{2\pi}\sigma)$. Since $g > 0$, $f(x) > 0$ for $x >0$. So the maximum of $f$ on $\mathbb{R}$ is the maximum of $f$ on $(0,\infty)$. 
+
+\begin{align*}
+0 &= f'(x) = -\frac{1}{x^2}g(\log x) + \frac{1}{x^2}g'(\log x) \\
+g(\log x) &= g'(\log x) \\
+\alpha e^{-(\log x -\mu)^2 / (2\sigma^2)} &=
+\alpha e^{-(z-\mu)^2 / (2\sigma^2)}\frac{\mu - \log x}{\sigma^2} \\
+1 &= \frac{\mu - \log x}{\sigma^2} \\
+\log x &= \mu - \sigma^2 \\
+x &= e^\mu e^{-\sigma^2}
+\end{align*}
+
+Since $g > 0$, $\lim_{z \rightarrow \pm \infty}  g(z) = 0$, and that there is only on critical point of $f$, conclude that this value of $x$ must maximize $f(x)$. 
+
+\subsection*{Exercise 7.11}
+
+Let $P(A) = \int_{-\infty}^\infty 1_{A}(x)f(x)dx$ for a nonnegative function $f$ with $\int_{-\infty}^\infty f(x)dx = 1$. Let $A = \{x_0\}$, a singleton (that is, the set $A$ consists of one single point on the real line). Show that $A$ is a Borel set and also a null set (that is, $P(A) = 0$). \\
+
+Answer: We can write $A$ as 
+$$
+(x_0 - 1, x_0] \cap [x_0, x_0 + 1)
+$$
+$$
+(x_0 - 1, x_0] = \cap_{n=1}^\infty (x_0 - 1, x_0 + 1/n),\quad [x_0, x_0 + 1) = \cap_{n=1}^\infty (x_0 - 1/n, x_0)$$
+
+This shows that $A$ can be written as the intersection of two Borel sets, which must also be a Borel set and
+
+$$
+P(A) = \int_{-\infty}^\infty 1_{\{x_0\}}(x)f(x) dx = \int_{x_0}^{x_0} f(x) dx = 0 .
+$$ 
+
+\subsection*{Exercise 7.14}
+
+Let $(A_i)_{i\geq 1}$ be a sequence of null sets. Show that $B = \cup_{i=1}^\infty A_i$ is also a null set.\\
+
+Answer: For each $A_i$, there is a $B_i \in \mathcal{A}$ (the $\sigma$-algebra on $\Omega$) such that $A_i \subset B_i$ and $P(B_i) = 0$. Let $B' = \cup_{i=1}^\infty B_i$. Then $B \subset B'$ and $0 \leq P(B') \leq \sum_{i=1}^\infty P(B_i) = 0$. This shows that $P(B') = 0$ and therefore $B$ is a null set for $P$.  
+
+\subsection*{Exercise 7.15}
+
+Let $X$ be a r.v. defined on a countable Probability space. Suppose $E\{|X|\} = 0$. Show that $X = 0$ except possibly on a null set. Is it possible to conclude, in general, that $X = 0$ everywhere (i.e., for all $\omega$)? \\
+
+Answer: If $0 = E\{|X|\} = \sum_{\omega \in \Omega} |X(\omega)|P(\{\omega\})$ implies that for each $\omega$ either $|X(\omega)| = 0$ of $P(\{\omega\}) = 0$. If $|X(\omega)| = 0$ for all $\omega$ we are done. Otherwise let $B$ be the union of all singletons $\{\omega\}$ such that $P(\{\omega\}) = 0$. Since $\Omega$ is countable, this is either a finite or countably infinite union. By the previous exercise, $B$ is also a null set. It is not possible to conclude that $X = 0$ everywhere. 
+
+\subsection*{Exercise 7.16}
+
+Let $F$ be a distribution function. Show that in general $F$ can have an infinite number of jump discontinuities, but that there can be at most countably many. \\
+
+Answer: Since $F$ is right continuous the set of discontinuities of $F$ is the set $D = \{x : F(x-) \neq F(x+)\} = \{x: F(x-) < F(x)\}$. For each $x \in D$, select one $q_x \in \mathbb{Q}$ such that $F(x-) < q_x < F(x)$. If $x,y \in D$ with $x \neq y$ we may assume $x < y$ without loss of generality. Since $F$ is nondecreasing, $q_x < F(x) \leq F(y-) < q_y$ so $q_x \neq q_y$. This means $r: D \rightarrow \mathbb{Q}$ defined by $r(x) = q_x$ is injective. Since $\mathbb{Q}$ is countable, $r(D) \subseteq \mathbb{Q}$ must also be countable. But then since $r$ is injective conclude that $D$ must be countable. 
+
+\subsection*{Exercise 7.17}
+
+Suppose a distribution function $F$ is given by
+
+$$
+F(x) = \frac{1}{4} 1_{[0,\infty)} + \frac{1}{2}1_{[1,\infty)} + \frac{1}{4}1_{[2,\infty)}.
+$$
+
+Let $P$ be given by $P((-\infty, x]) = F(x)$. Then find the probabilities of the following events:
+
+\begin{enumerate}[a)]
+\item $A = \left(-\frac{1}{2}, \frac{1}{2}\right)$
+
+\item $B = \left(-\frac{1}{2}, \frac{3}{2}\right)$
+
+\item $C = \left(\frac{2}{3}, \frac{5}{2}\right)$
+
+\item $D = [0,2)$
+
+\item $E = (3,\infty)$. 
+\end{enumerate}
+
+Answer:
+
+\begin{enumerate}[a)]
+\item $P(A) = F\left(\frac{1}{2}-\right) - F\left(-\frac{1}{2}\right) = \frac{1}{4} - 0 = \frac{1}{4}$.
+
+\item $P(B) = F\left(\frac{3}{2}-\right)-F\left(-\frac{1}{2}\right) =\frac{3}{4} - 0 = \frac{3}{4}$.
+
+\item $P(C) = F\left(\frac{5}{2}-\right)-F\left(-\frac{2}{3}\right) = 1- \frac{1}{4} = \frac{3}{4}$.
+
+\item $P(D) = F(2-) - F(0-) = \frac{3}{4} - 0 = \frac{3}{4}$.
+
+\item $P(E) = (\lim_{x\rightarrow\infty} F(x)) - F(3) = 1 - 1 = 0$. 
+\end{enumerate}
+
+\subsection*{Exercise 7.18}
+
+Suppose a function $F$ is given by
+
+$$
+F(x) = \sum_{i=1}^\infty \frac{1}{2^i}1_{[\frac{1}{i}, \infty)} .
+$$
+
+Show that $F$ is a distribution on $\mathbb{R}$. Let us define $P$ by $P((-\infty, x]) = F(x)$. Find the probabilities of the following events:
+
+\begin{enumerate}[a)]
+\item $A = [1,\infty)$
+
+\item $B = \left[\frac{1}{10}, \infty\right)$
+
+\item $C = \{0\}$
+
+\item $D = \left[0, \frac{1}{2}\right)$ 
+
+\item $E = (-\infty , 0)$
+
+\item $G = (0,\infty)$
+\end{enumerate}
+
+Answer: $F(x) = 0$ for $-\infty < x \leq 0$ and $F(x) = 1$  for $1 \leq x < \infty$. For $0<x<1$, $F$ has the form of a step function with infinitely many steps of decreasing length and altitude. We have $F(x) = \frac{1}{n}$ on each interval $[1/n, 1/(n-1)$ for $n = 2,3,\dots$. That is $F(x) = 1/2$ on $1/2 \leq x < 1$, $F(x) = 1/3$ on $1/3 \leq x < 1/2$, and so on. Using this information we can show that $F$ is a distribution. 
+
+\begin{enumerate}
+\item Since $1_{[1/i, \infty)}(x) = 0$ for all $i$ whenever $x \leq 0$, we have $F(x) = 0$ for any $x \leq 0$. Then $\lim_{x\rightarrow -\infty} F(x) = 0$. Since $1_{[1/i, \infty)}(x) = 1$ for all $i$ whenever $x \geq 1$, we have $F(x) = \sum_{i = 1}^\infty 1/2^i = 1$ for any $x \geq 1$. Then $\lim_{x \rightarrow \infty} F(x) = 1$.
+
+\item Suppose $x < y$. Since $1_{[1/i , \infty)}(x) \leq 1_{[1/i, \infty)}(y)$ for each $i = 1,2,\dots$,
+
+$$
+F(x) = \sum_{i=1}^\infty \frac{1}{2^i}1_{[1/i, \infty)}(x) \leq \sum_{i=1}^\infty \frac{1}{2^i}1_{[1/i, \infty)}(y) = F(x).
+$$
+
+\item Since $F(y) = 1$ for all $y \geq 1$, we have $\lim_{y \downarrow x} F(y) = \lim_{y \downarrow x} 1 = 1 = F(x)$ for all $x \geq 1$. Since $F(y) = 0$ for all $y \leq 0$ we have $\lim_{y \downarrow x} F(x) = 0 = F(x)$ for all $x < 0$. This is because if $y\downarrow x$ for $x<0$ the sequence of $y$ values approaching $x$ must eventually be negative. For $0<x<1$ consider that $x$ must be in the interval $[1/n, 1/(n-1))$ for some $n \geq 2$. Since $F(x)$ is constant on each such interval (with $F(x) = \sum_{i=n}^\infty \frac{1}{2^i}$), there must exist an interval $(x,x + \epsilon)$ on which $F(y) = F(x)$ for all $y \in (x,x+\epsilon)$. Thus $\lim_{y \downarrow x} F(y) = F(x)$. Finally consider $x = 0$. We have $F(0) = 0$ but $F(y) > 0$ for all $y > 0$. However, by the previous observation we see that for $y \in (0,1)$ there exists some positive integer $n$ such that $y \in [1/n, 1/(n-1))$ so that $F(y) = \sum_{i=n}^\infty \frac{1}{2^i}$. As $y \downarrow 0$, $n \rightarrow \infty$. We sum an increasingly smaller tail of the geometric series, whose terms tend to 0. Thus $F(y) \downarrow 0 = F(x)$ and $F(x)$ is right continuous at $x = 0$. 
+\end{enumerate}
+
+\begin{enumerate}[a)]
+\item $P(A) = (\lim_{x\rightarrow \infty} F(x)) - F(1-) = 1 - \frac{1}{2} = \frac{1}{2}$.
+
+\item $P(B) = 1- F\left(\frac{1}{10}-\right) = 1 - \frac{1}{11} = \frac{10}{11}$.
+
+\item $P(C) = P([0,0]) = F(0) - F(0-) = 0 - 0 = 0$.
+
+\item $P(D) = F\left(\frac{1}{2}-\right) - F(0-) = \frac{1}{3} - 0 = \frac{1}{3}$ 
+
+\item $P(E) = F(0-) - \lim_{x\rightarrow - \infty} F(x) = 0 - 0 = 0$.
+
+\item $P(G) = (\lim_{x\rightarrow \infty} F(x)) - F(0) = 1-0 = 1$.
+\end{enumerate}
+
+\end{document}
